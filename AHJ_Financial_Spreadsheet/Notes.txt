@@ -1,0 +1,7 @@
+Notes:
+		(5) Lagging_Line [Ichimoku closing price 26 sessions in the past]
+		(6) Conversion [Ichimoku current closing price for conversion line]
+		(7) Base [Ichimoku current closing price for base line]
+		(8) SpanA [Ichimoku current Span A price]
+		(9) SpanB [Ichimoku current Span B price]
+		(10) Momentum [subtract Lagging_Line from Current_Price]

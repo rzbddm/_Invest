@@ -1,0 +1,35 @@
+1. Create a .xlsx file tha will contain financial data. This file will have ticker symbols listed in column A, starting in cell A10.   I want to use Visual Studio Code 2019 python as the programming language for this endeavor. The .xlsx file-name will have this format, AHJ_Finance_Date_Time, where Date will be Year+Month+Day followed by Time using the 24 hour format, hour+minute. An example would be AHJ_Finance_20240907_2312.
+
+2. A file called AHJ_Finance_Tickers.csv will contains the ticker symbols. 
+
+3. The format of the file containing the financial data will have the following formt:
+	a. Tickers will be listed in Column A, starting at A10
+	b. Heading for the financial data will begin in row 9 of spreadsheet going from left to right
+	c. Financial Data will be from left to right as listed below, with comments in []:
+		(1) Industry [this column will be in text]
+		(2) Sector [this column will be in text]
+		(3) Current_Price [this column numbers and 2 places post decimal]
+		(4) Price-1Q [price latest quarterly earnings report closed on that day]
+		(5) Lagging_Line [Ichimoku closing price 26 sessions in the past]
+		(6) Conversion [Ichimoku current closing price for conversion line]
+		(7) Base [Ichimoku current closing price for base line]
+		(8) SpanA [Ichimoku current Span A price]
+		(9) SpanB [Ichimoku current Span B price]
+		(10) Momentum [subtract Lagging_Line from Current_Price]
+		(11) Revenue_LastQ [revenue from last earnings report]
+		(12) Revenue_2Q [revenue 2 earnings report in the past]
+		(13) Revenue_3Q [revenue 3 earnings reports in the past]
+		(14) Cash
+		(15) Debt
+		(16) Net_Income [net income]
+		(17) Enterprise_V [enterprise value]
+		(18) PE [price to earnings ratio]
+		(19) EPS [earnings per share]
+		(20) FCF [free cash flow]
+		(21) A_EBITDA_ttm [adjusted EBITDA ttm]
+		(22) EV/EBITDA [enterprise value divided by EBITDA]
+		(23) EV/EPS [enterprise value divided by earnings per share]
+		(24) EV/FCF [enterprise value divided by free cash flow] 
+		(25) Gross_Margin [gross margin]
+
+		
