@@ -3,12 +3,11 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from datetime import datetime
 import openpyxl
-from openpyxl.utils import get_column_letter
 
 def autofit_columns(ws):
     for col in ws.columns:
         max_length = 0
-        column = col[0].column_letter # Get the column name
+        column = col[0].column_letter  # Get the column name
         for cell in col:
             try:
                 if len(str(cell.value)) > max_length:
@@ -51,11 +50,28 @@ if file_path:
 
     # Load the workbook and autofit columns
     workbook = openpyxl.load_workbook(output_file_path)
-    for sheet_name in workbook.sheetnames:
-        ws = workbook[sheet_name]
-        autofit_columns(ws)
-    workbook.save(output_file_path)
+    ws_nasdaq = workbook['NASDAQ']
+    ws_nasdaq.title = 'NASDAQ'
+    autofit_columns(ws_nasdaq)
 
+    for sheet_name in sheet_names:
+        ws = workbook[sheet_name]
+        ws['A1'] = sheet_name
+        count = df[df['Sector'] == sheet_name].shape[0]
+        ws['B1'] = count
+
+        # Copy the data to the sheet starting from row 10
+        sector_data = df[df['Sector'] == sheet_name]
+        for idx, row in sector_data.iterrows():
+            ws.append(row.values.tolist())
+
+        # Delete row 2 in all sheets except NASDAQ
+        ws.delete_rows(2)
+
+        autofit_columns(ws)
+
+    workbook.save(output_file_path)
     print(f"File saved as: {output_file_path}")
+
 else:
     print("No file selected.")
