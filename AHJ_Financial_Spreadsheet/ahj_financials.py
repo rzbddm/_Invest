@@ -2,6 +2,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 import os
+import time
 from openpyxl import load_workbook
 
 # Full path to the CSV file
@@ -28,7 +29,14 @@ data = {col: [] for col in columns}
 # Fetch financial data for each ticker
 for ticker in tickers:
     stock = yf.Ticker(ticker)
-    info = stock.info
+    
+    while True:
+        try:
+            info = stock.info
+            break
+        except yf.exceptions.YFRateLimitError:
+            print(f"Rate limit exceeded for {ticker}. Waiting for 60 seconds before retrying...")
+            time.sleep(10)
     
     data['Ticker'].append(ticker)
     data['Industry'].append(info.get('industry', 'N/A'))
@@ -42,14 +50,22 @@ for ticker in tickers:
     data['Net_Income_ttm'].append(f"{info.get('netIncome', 0) / 1_000_000:.2f}M")
     data['Adjusted_EBITDA_ttm'].append(f"{info.get('ebitda', 0) / 1_000_000:.2f}M")
     data['Free_Cash_Flow_ttm'].append(f"{info.get('freeCashflow', 0) / 1_000_000:.2f}M")
-    data['Price_To_Earnings'].append(round(info.get('trailingPE', 0), 2))
+    
+    # Handle non-numeric trailingPE
+    pe_ratio = info.get('trailingPE', 'N/A')
+    data['Price_To_Earnings'].append(round(float(pe_ratio), 2) if pe_ratio != 'N/A' else 'N/A')
+
     data['EPS'].append(round(info.get('trailingEps', 0), 2))
     data['Gross_Margin'].append(round(info.get('grossMargins', 0) * 100, 2))
     
     # Additional financial metrics
     data['Price_To_Book'].append(round(info.get('priceToBook', 0), 2))
     data['Price_To_Sales'].append(round(info.get('priceToSalesTrailing12Months', 0), 2))
-    data['Earnings_Yield'].append(round(1 / info.get('trailingPE', float('inf')) * 100, 2))
+    
+    # Handle non-numeric trailingPE for Earnings_Yield
+    pe_ratio = info.get('trailingPE', float('inf'))
+    data['Earnings_Yield'].append(round(1 / float(pe_ratio) * 100, 2) if pe_ratio != float('inf') else 'N/A')
+    
     data['Current_Ratio'].append(round(info.get('currentRatio', 0), 2))
     data['Quick_Ratio'].append(round(info.get('quickRatio', 0), 2))
     data['Debt_to_Equity'].append(round(info.get('debtToEquity', 0), 2))
@@ -66,18 +82,15 @@ for ticker in tickers:
     market_risk_premium = 0.06  # Example 6% market risk premium
     data['CAPM'].append(round(risk_free_rate + info.get('beta', 0) * market_risk_premium, 2))
 
+    # Add a 50-millisecond delay between requests
+    time.sleep(0.25)
+
 # Convert dictionary to DataFrame
 df = pd.DataFrame(data)
 
 # Display the DataFrame
-#df.head()
 print("First 5 rows:\n", df.head(5).to_string(), "\n")
 print("Last 5 rows:\n", df.tail(5).to_string())
-
-    
-
-# Create a DataFrame
-df = pd.DataFrame(data)
 
 # Generate the filename with the current date and time
 now = datetime.now()
