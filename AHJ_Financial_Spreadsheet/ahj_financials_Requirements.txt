@@ -1,0 +1,53 @@
+Requirements Document
+
+1. Introduction
+This document outlines the requirements for the Python script `ahj_financials.py`, which fetches financial data for a list of stock ticker symbols and saves the processed data to an Excel file.
+
+2. Purpose
+The purpose of this script is to retrieve financial metrics for specified stock tickers using the Yahoo Finance API and store the information in a structured Excel spreadsheet.
+
+3. Functional Requirements
+    Read Ticker Symbols: Read stock ticker symbols from a CSV file located at `C:/Users/a_h_J/OneDrive/Documents/_Invest/AHJ_Financial_Spreadsheet/AHJ_Finance_Tickers.csv`.
+    Fetch Financial Data: Use `yfinance` to retrieve financial details for each ticker, including:
+      Industry, Sector, Current Price, Market Cap
+      Cash, Debt, Enterprise Value, Revenue (TTM), Net Income (TTM), Adjusted EBITDA (TTM)
+      Financial ratios such as Price   to   Earnings, Price   to   Book, Price   to   Sales, Current Ratio, Quick Ratio, Debt   to   Equity, Return on Assets, Operating Margin, Net Profit Margin, and Interest Coverage Ratio
+      Dividend Yield, Dividend Rate, Beta, and CAPM calculation
+    Handle API Rate Limits: Implement a retry mechanism with a delay to prevent request failures due to rate limiting.
+    Store Data in a DataFrame: Structure data into a Pandas DataFrame with predefined columns.
+    Generate Output File: Save the DataFrame as an Excel file (`.xlsx`) with a timestamped filename.
+    Format the Excel File:
+      Use `openpyxl` to auto   size columns for better readability.
+      Ensure that the file is properly saved and formatted.
+
+4. Non   Functional Requirements
+    Performance: Efficiently handle multiple API requests with minimal delays.
+    Scalability: Capable of processing a large number of stock tickers.
+    Error Handling:
+      Gracefully handle missing or unavailable financial data by replacing it with `N/A`.
+      Implement exception handling for API rate limits and network errors.
+    Security: Restrict file operations to avoid overwriting critical files.
+    Usability: Provide meaningful console output to indicate script progress and potential issues.
+
+5. Dependencies
+The script requires the following Python libraries:
+    `pandas` for data manipulation
+    `yfinance` for fetching stock market data
+    `datetime` for handling timestamps
+    `os` for file operations
+    `time` for managing delays between API requests
+    `openpyxl` for working with Excel files
+
+6. Constraints
+    The CSV file with stock tickers must exist at the specified path before running the script.
+    The system must have internet access to retrieve financial data from Yahoo Finance.
+    The script assumes a risk   free rate of 4% and a market risk premium of 6% for CAPM calculations.
+
+7. Future Enhancements
+    Allow users to specify the CSV file path dynamically.
+    Implement a GUI for better user interaction.
+    Introduce logging for better debugging and tracking of execution history.
+
+8. Conclusion
+This document provides a detailed overview of the script’s functionality and requirements. Any modifications should adhere to the outlined structure to maintain script efficiency and reliability.
+
